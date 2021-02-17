@@ -1,0 +1,391 @@
+npm run dev
+
+$varName = "string"; $varName - Чтоб присвоить переменной значение и вывести её
+
+
+<p><?php echo $varName ?></p> - Чтоб вывести данные
+<h1><?php bloginfo('name'); ?></h1> - Чтоб вывести название сайта
+<p><?php bloginfo('description'); ?></p> - Чтоб вывести информацию о сайте
+<?php get_header(); ?> - Чтоб вывести header из header.php
+<?php get_footer(); ?> - Чтоб вывести footer из footer.php
+
+<html <?php language_attributes(); ?>>
+<meta charset="<?php bloginfo('charset'); ?>">
+
+<head>
+<?php wp_head(); ?> - чтоб связаться с functions.php писать в header.php
+</head>
+
+<?php wp_footer(); ?> - Прописать в футере чтоб подключать скрипты
+</body>
+</html>
+
+<div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/library-hero.jpg')?>);"></div> - Чтоб выводить изоображение из вёрстки
+
+<a href="<?php echo site_url('/index.php/about-us')?>">About Us</a> - Для прикрепления ссылки
+<?php echo site_url()?> - Ссылка сразу на index
+<li <?php if (is_page('about-us') or wp_get_post_parent_id(0) == 9) echo 'class="current-menu-item"' ?>><a href="<?php echo site_url('/index.php/about-us')?>">About Us</a></li> - Чтоб в дочернем меню подсвечивалось родительское (9 - это id страницы)
+
+
+<?php echo get_the_ID(); ?> - Чтоб вывести и узнать ID страницы
+<?php echo wp_get_post_parent_id(get_the_ID()); ?> - Чтоб вывести и узнать ID страницы родителя
+
+<?php wp_list_pages(); ?> - получить список страниц
+
+<?php echo paginate_links();  ?> - Для вывода пагинации
+
+<?php echo wp_trim_words(get_the_content(), 18); ?> - Для сокращения текста в предпросмотре карточки
+
+===============================================
+
+Чтобы выводить элемент если строница дочерняя или нет
+
+<?php 
+    $theParent = wp_get_post_parent_id(get_the_ID()); 
+    if ($theParent) { ?>
+        <div class="metabox metabox--position-up metabox--with-home-link">
+            <p><a class="metabox__blog-home-link" href="<?php echo get_permalink($theParent);?>"><i class="fa fa-home" aria-hidden="true"></i> Back to <?php echo get_the_title($theParent); ?></a><span class="metabox__main"><?php the_title(); ?></span></p>
+        </div>
+    <?php }
+?>
+===============================================
+
+associative array
+
+<?php 
+    $animalSounds = array(
+        'dog' => 'bark',
+        'cat' => 'meow',
+        'pig' => 'oink'
+    );
+
+    echo $animalSounds['dog'];
+
+?>
+_______________________________________________
+
+<?php 
+    $count = 1;
+
+    while ($count < 100) {
+        echo "<li>$count</li>";
+        $count++;
+    }
+?>
+
+_______________________________________________
+
+<?php 
+
+    $names = array("John", "Jane", "Tom");
+
+    $count = 0;
+
+    while ($count < count($names)) {
+        echo "<li>Hi my name is $names[$count]</li>";
+        $count++;
+    }
+?>
+<p>Hello my name is <?php echo $names[0]; ?>.</p>
+
+_______________________________________________
+
+index.php
+
+<?php 
+    get_header();
+
+    while (have_posts()) {
+        the_post(); ?>
+        <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+        <?php the_content(); ?>
+        <hr>
+    <?php }
+
+get_footer(); 
+?>
+_______________________________________________
+
+Чтоб выводить посты
+Клик по ссылке переходит на single.php
+
+<?php 
+    get_header();
+
+    while (have_posts()) {
+        the_post(); ?>
+        <h2><?php the_title(); ?></h2>
+        <?php the_content(); ?>
+    <?php }
+
+    get_footer(); 
+?>
+_______________________________________________
+
+Чтоб выводить контент страницы в page.php
+
+<?php 
+    get_header();
+
+    while (have_posts()) {
+        the_post(); ?>
+        <h1>This is a page, not a post.</h1>
+        <h2><?php the_title(); ?></h2>
+        <?php the_content(); ?>
+    <?php }
+
+    get_footer(); 
+?>
+
+_______________________________________________
+
+<?php wp_head(); ?> - чтоб связаться с functions.php 
+
+
+
+functions.php
+
+<?php 
+
+function university_files() {
+    wp_enqueue_script('main_univversity_js', get_theme_file_uri('/js/scripts-bundled.js'), NULL, '1.0', true); - Чтоб подключить скрипт
+    wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i'); - Подключить гугл шрифты
+    wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'); - Шрифт иконок
+    wp_enqueue_style('university_main_styles', get_stylesheet_uri()); - Чтоб подключить осеовной стиль 
+}
+
+add_action('wp_enqueue_scripts', 'university_files');
+
+?>
+
+______________________
+
+function university_features() {
+    register_nav_menu('headerMenuLocation', 'Header Menu Location'); - Для регистрации меню
+    register_nav_menu('footerLocationOne', 'Footer Location One');
+    register_nav_menu('footerLocationTwo', 'Footer Location Two');
+
+    add_theme_support( 'title-tag'); - Для оглавления таблички страницы
+}
+
+add_action( 'after_setup_theme', 'university_features' );
+
+========================
+html menu
+
+<?php 
+    wp_nav_menu(array(
+        'theme_location' => 'headerMenuLocation',
+    ));
+?>
+========================
+
+_______________________________________________
+
+Здесь я выводил сайд меню разделов About Us и Privacy
+
+<?php 
+    
+    $testArray = get_pages(array(
+        'child_of' => get_the_ID()
+    ));
+    
+    if ($theParent or $testArray ) { ?>
+    <div class="page-links">
+        <h2 class="page-links__title"><a href="<?php echo get_permalink($theParent); ?>"><?php echo get_the_title($theParent); ?></a></h2>
+        <ul class="min-list">
+            <?php 
+                if ($theParent) {
+                    $findChildrenOf = $theParent;
+                } else {
+                    $findChildrenOf = get_the_ID();
+                }
+            wp_list_pages(array(
+                    'title_li' => NULL,
+                    'child_of' => $findChildrenOf,
+                    'sort_column' => 'menu_order'
+
+                )); 
+            ?>
+        </ul>
+    </div>  
+    <?php } ?>
+
+    _______________________________________________
+
+    Blog размещается в index.php 
+
+    <?php get_header(); ?>
+<div class="page-banner">
+    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>
+    <div class="page-banner__content container container--narrow">
+        <h1 class="page-banner__title">Welcome to our blog!</h1>
+        <div class="page-banner__intro">
+            <p>Keep up with our latest news.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container container--narrow page-section">
+    <?php 
+        while (have_posts()) {
+            the_post(); ?>
+            <div class="post-item">
+                <h2 class="headline headline--medium headline--post-title" ><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
+                <div class="metabox">
+                    <p>Posted by <?php the_author_posts_link(); ?>  on <?php the_time('n.j.y'); ?> in <?php echo get_the_category_list(', ') ?></p>
+                </div>
+                <div class="generic-content">
+                    <?php the_excerpt(); ?>
+                    <p><a class="btn btn--blue" href="<?php the_permalink(); ?>">Continue reading &raquo;</a></p>
+                </div>
+            </div>
+    <?php }
+    echo paginate_links(); - Для вывода пагинации
+    ?>
+</div>
+<?php get_footer(); ?>
+
+_______________________________________________
+
+archive.php
+
+<h1 class="page-banner__title">
+        <?php the_archive_title(); ?>
+        <!-- <?php if(is_category()) {
+            single_cat_title();
+        } if (is_author()) {
+            echo "Posts by "; the_author();
+        } ?> -->
+</h1>
+
+_______________________________________________
+
+Для создания категории постов в папке wp-content создать папку mu-plugins а в ней php файл. напривер university-post-types.php
+____________________
+
+<?php 
+	function university_post_types() {
+    register_post_type('event', array(
+        'show_in_rest' => true, - Для того чтоб редактор поста выглядел современно
+		'supports' => array('title', 'editor', 'excerpt'), - Для того чтоб редактор поста выглядел современно и доьавление возможности excerpt
+        'rewrite' => array('slug' => 'events'), - Чтоб изменить название линка на желаемое
+        'has_archive' => true, - Чтоб была общая страница для всех постов из этого раздела
+        'public' => true, - чтоб было всем видно
+        'labels' => array( - Для настройки 
+            'name' => 'Events', - Имя 
+			'add_new_item' => 'Add New Event', - Название для добавления нового поста
+			'edit_item' => 'Edit Event', - Название для изменения поста
+			'all_items' => 'All Events', - Название для подкатегории во всех постах
+			'singular_name' => 'Event'
+        ),
+        'menu_icon' => 'dashicons-calendar' - Для изменения иконки (нагуглить wordpress dashicons)
+    ));
+	}
+
+	add_action('init', 'university_post_types');
+?>
+______________________
+
+Вёрстка в front-page.php c cылками на посты из event
+______________________
+<div class="full-width-split group">
+    <div class="full-width-split__one">
+        <div class="full-width-split__inner">
+            <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
+            
+            <?php
+                $homepageEvents = new WP_Query(array(
+                    'posts_per_page' => 2,
+                    'post_type' => 'event'
+                ));
+
+                while($homepageEvents->have_posts()){
+                    $homepageEvents->the_post(); ?>
+            
+            <div class="event-summary">
+                <a class="event-summary__date t-center" href="#">
+                    <span class="event-summary__month"><?php the_time('M'); ?></span>
+                    <span class="event-summary__day"><?php the_time('d'); ?></span>
+                </a>
+                <div class="event-summary__content">
+                    <h5 class="event-summary__title headline headline--tiny"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
+                    <p><?php if (has_excerpt()) {
+                                    echo get_the_excerpt();
+                                } else {
+                                    echo wp_trim_words(get_the_content(), 18);
+                                }
+                                ?><a href="<?php the_permalink(); ?>" class="nu gray">Read more</a></p> 
+                </div>
+            </div>
+
+                <?php }
+            ?>
+
+            <p class="t-center no-margin"><a href="<?php echo get_post_type_archive_link('event'); ?>" class="btn btn--blue">View All Events</a></p>
+        </div>
+    </div>   
+______________________
+
+Вёрстка каждого поста выводится в single-event.php
+______________________
+<?php 
+    get_header();
+
+    while (have_posts()) {
+        the_post(); ?>
+        <div class="page-banner">
+            <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>
+            <div class="page-banner__content container container--narrow">
+                <h1 class="page-banner__title"><?php the_title(); ?></h1>
+                <div class="page-banner__intro">
+                    <p>DONT FORGET TO REPLACE ME LATER.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container container--narrow page-section">
+        <div class="metabox metabox--position-up metabox--with-home-link">
+                <p><a class="metabox__blog-home-link" href="<?php echo get_post_type_archive_link('event'); ?>"><i class="fa fa-home" aria-hidden="true"></i> Events Home</a><span class="metabox__main"><?php the_title(); ?></span></p>
+            </div>
+            <div class="generic-content"><?php the_content(); ?></div>
+        </div>
+    <?php }
+
+    get_footer(); 
+?>
+______________________
+
+Вёрстка всех постов выводится в archive-event.php
+______________________
+<?php get_header(); ?>
+<div class="page-banner">
+    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>
+    <div class="page-banner__content container container--narrow">
+        <h1 class="page-banner__title">All Events</h1>
+        <div class="page-banner__intro">
+            <p>See what is going on in our world.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container container--narrow page-section">
+    <?php 
+        while (have_posts()) {
+            the_post(); ?>
+            
+            <div class="event-summary">
+                <a class="event-summary__date t-center" href="#">
+                    <span class="event-summary__month"><?php the_time('M'); ?></span>
+                    <span class="event-summary__day"><?php the_time('d'); ?></span>
+                </a>
+                <div class="event-summary__content">
+                    <h5 class="event-summary__title headline headline--tiny"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
+                    <p><?php echo wp_trim_words(get_the_content(), 18); ?><a href="<?php the_permalink(); ?>" class="nu gray">Learn more</a></p>
+                </div>
+            </div>
+
+    <?php }
+    echo paginate_links(); 
+    ?>
+</div>
+<?php get_footer(); ?>
