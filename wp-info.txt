@@ -294,10 +294,23 @@ ______________________
         <div class="full-width-split__inner">
             <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
             
-            <?php
+                <?php
+                $today = date('Ymd'); - Переменная для сегодняшней даты
                 $homepageEvents = new WP_Query(array(
-                    'posts_per_page' => 2,
-                    'post_type' => 'event'
+                    'posts_per_page' => -1, - (-1 чтоб вывести все посты, 2 чтоб вывести только два)
+                    'post_type' => 'event', - Откуда брать
+                    'meta_key' => 'event_date',
+                    'orderby' => 'meta_value', - Последовательность по значению
+                    'order' => 'ASC', - чтоб последовательность по алфавиту развернуть  или 'DESC'
+                    'meta_query' => array(  - для того чтоб не показывать прошедшие даты
+                        array(
+                            'key' => 'event_date',
+                            'compare' => '>=',
+                            'value' => $today, 
+                            'type' => 'numeric'
+                        )
+                    )
+
                 ));
 
                 while($homepageEvents->have_posts()){
