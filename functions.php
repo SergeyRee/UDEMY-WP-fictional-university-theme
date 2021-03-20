@@ -37,12 +37,17 @@ function university_files() {
     wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=apiKeyApiKeyApiKeyApiKey', NULL, '1.0', true);   
 
     if (strstr($_SERVER['SERVER_NAME'], 'localhost')) {
-        wp_enqueue_script('main_univversity_js', 'http://localhost:3000/bundled.js', NULL, '1.0', true);   
+        wp_enqueue_script('main_university_js', 'http://localhost:3000/bundled.js', NULL, '1.0', true);   
     } else {
-        wp_enqueue_script('our_vendors_js', get_theme_file_uri('/bundled-assets/vendors~scripts.24982ae99b1dbecdda3e.js'), NULL, '1.0', true);   
-        wp_enqueue_script('main_univversity_js', get_theme_file_uri('/bundled-assets/scripts.6f4826f8389086886850.js'), NULL, '1.0', true);
-        wp_enqueue_style('our_main_styles', get_theme_file_uri('/bundled-assets/styles.6f4826f8389086886850.css'));
+        wp_enqueue_script('our_vendors_js', get_theme_file_uri('/bundled-assets/vendors~scripts.9678b4003190d41dd438.js'), NULL, '1.0', true);   
+        wp_enqueue_script('main_university_js', get_theme_file_uri('/bundled-assets/scripts.0c49535a3c2c78453a1c.js'), NULL, '1.0', true);
+        wp_enqueue_style('our_main_styles', get_theme_file_uri('/bundled-assets/styles.0c49535a3c2c78453a1c.css'));
     }
+
+    wp_localize_script('main_university_js', 'universityData', array(
+        'root_url' => get_site_url(),
+        
+    ));
     
 }
 
@@ -65,7 +70,7 @@ add_action('after_setup_theme', 'university_features');
 function university_adjust_queries($query) {
     $today = date('Ymd');
     
-    if (!is_admin() AND is_post_type_archive('campus') AND is_main_query()) {
+    if (!is_admin() AND is_post_type_archive('campus') AND is_main_query()) {    
         $query->set('posts_per_page', -1);
     }
     
@@ -85,7 +90,7 @@ function university_adjust_queries($query) {
                 'key' => 'event_date',
                 'compare' => '>=',
                 'value' => $today,
-                'type' => 'numeric'
+                'type' => 'numeric'     
             )
         ));
     }
