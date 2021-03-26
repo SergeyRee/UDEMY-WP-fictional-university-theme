@@ -22,14 +22,16 @@
   background-color: color($darkOrange b(+10%) s(+10%));
 }
 
-.edit-note, .delete-note {
+.edit-note,
+.delete-note {
   @media (min-width: 635px) {
     position: relative;
     top: -12px;
   }
 }
 
-.edit-note:hover, .delete-note:hover {
+.edit-note:hover,
+.delete-note:hover {
   background-color: #DDD;
 }
 
@@ -127,7 +129,7 @@
 }
 
 /* Reveal and Hide Fade Transitions */
-#my-notes {
+/* #my-notes {
   position: relative;
 }
 
@@ -152,4 +154,4 @@
   left: 0;
   right: 0;
   opacity: 0;
-}
+} */
